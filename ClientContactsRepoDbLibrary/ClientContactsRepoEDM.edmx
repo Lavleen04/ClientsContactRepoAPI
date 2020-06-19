@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ContactsRepoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClientAddressDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="Street" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Zip" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="ClientDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="First" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Middle" Type="varchar" MaxLength="200" />
+          <Property Name="Last" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ContactsRepo.dbo.ClientRepoConfig' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ClientRepoConfig">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ConfigType" />
+            <PropertyRef Name="ConfigKey" />
+            <PropertyRef Name="ConfigValue" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConfigType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ConfigKey" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ConfigValue" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PhoneDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="PhoneType" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ClientAddressDetails_ClientDetails">
+          <End Role="ClientDetails" Type="Self.ClientDetails" Multiplicity="1" />
+          <End Role="ClientAddressDetails" Type="Self.ClientAddressDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientDetails">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientAddressDetails">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhoneDetails_ClientDetails">
+          <End Role="ClientDetails" Type="Self.ClientDetails" Multiplicity="1" />
+          <End Role="PhoneDetails" Type="Self.PhoneDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientDetails">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhoneDetails">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ContactsRepoModelStoreContainer">
+          <EntitySet Name="ClientAddressDetails" EntityType="Self.ClientAddressDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClientDetails" EntityType="Self.ClientDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PhoneDetails" EntityType="Self.PhoneDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClientRepoConfig" EntityType="Self.ClientRepoConfig" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ClientRepoConfig].[Id] AS [Id], 
+    [ClientRepoConfig].[ConfigType] AS [ConfigType], 
+    [ClientRepoConfig].[ConfigKey] AS [ConfigKey], 
+    [ClientRepoConfig].[ConfigValue] AS [ConfigValue]
+    FROM [dbo].[ClientRepoConfig] AS [ClientRepoConfig]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_ClientAddressDetails_ClientDetails" Association="Self.FK_ClientAddressDetails_ClientDetails">
+            <End Role="ClientDetails" EntitySet="ClientDetails" />
+            <End Role="ClientAddressDetails" EntitySet="ClientAddressDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhoneDetails_ClientDetails" Association="Self.FK_PhoneDetails_ClientDetails">
+            <End Role="ClientDetails" EntitySet="ClientDetails" />
+            <End Role="PhoneDetails" EntitySet="PhoneDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ContactsRepoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClientAddressDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="Street" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="State" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Zip" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ClientDetail" Relationship="Self.FK_ClientAddressDetails_ClientDetails" FromRole="ClientAddressDetails" ToRole="ClientDetails" />
+        </EntityType>
+        <EntityType Name="ClientDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="First" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Middle" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Last" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ClientAddressDetails" Relationship="Self.FK_ClientAddressDetails_ClientDetails" FromRole="ClientDetails" ToRole="ClientAddressDetails" />
+          <NavigationProperty Name="PhoneDetails" Relationship="Self.FK_PhoneDetails_ClientDetails" FromRole="ClientDetails" ToRole="PhoneDetails" />
+        </EntityType>
+        <EntityType Name="PhoneDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ClientDetail" Relationship="Self.FK_PhoneDetails_ClientDetails" FromRole="PhoneDetails" ToRole="ClientDetails" />
+        </EntityType>
+        <EntityType Name="ClientRepoConfig">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ConfigType" />
+            <PropertyRef Name="ConfigKey" />
+            <PropertyRef Name="ConfigValue" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConfigType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ConfigKey" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ConfigValue" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ClientAddressDetails_ClientDetails">
+          <End Role="ClientDetails" Type="Self.ClientDetail" Multiplicity="1" />
+          <End Role="ClientAddressDetails" Type="Self.ClientAddressDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientDetails">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientAddressDetails">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhoneDetails_ClientDetails">
+          <End Role="ClientDetails" Type="Self.ClientDetail" Multiplicity="1" />
+          <End Role="PhoneDetails" Type="Self.PhoneDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientDetails">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhoneDetails">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ContactsRepoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClientAddressDetails" EntityType="Self.ClientAddressDetail" />
+          <EntitySet Name="ClientDetails" EntityType="Self.ClientDetail" />
+          <EntitySet Name="PhoneDetails" EntityType="Self.PhoneDetail" />
+          <EntitySet Name="ClientRepoConfigs" EntityType="Self.ClientRepoConfig" />
+          <AssociationSet Name="FK_ClientAddressDetails_ClientDetails" Association="Self.FK_ClientAddressDetails_ClientDetails">
+            <End Role="ClientDetails" EntitySet="ClientDetails" />
+            <End Role="ClientAddressDetails" EntitySet="ClientAddressDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhoneDetails_ClientDetails" Association="Self.FK_PhoneDetails_ClientDetails">
+            <End Role="ClientDetails" EntitySet="ClientDetails" />
+            <End Role="PhoneDetails" EntitySet="PhoneDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ContactsRepoModelStoreContainer" CdmEntityContainer="ContactsRepoEntities">
+          <EntitySetMapping Name="ClientAddressDetails">
+            <EntityTypeMapping TypeName="ContactsRepoModel.ClientAddressDetail">
+              <MappingFragment StoreEntitySet="ClientAddressDetails">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientDetails">
+            <EntityTypeMapping TypeName="ContactsRepoModel.ClientDetail">
+              <MappingFragment StoreEntitySet="ClientDetails">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="First" ColumnName="First" />
+                <ScalarProperty Name="Middle" ColumnName="Middle" />
+                <ScalarProperty Name="Last" ColumnName="Last" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PhoneDetails">
+            <EntityTypeMapping TypeName="ContactsRepoModel.PhoneDetail">
+              <MappingFragment StoreEntitySet="PhoneDetails">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneType" ColumnName="PhoneType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientRepoConfigs">
+            <EntityTypeMapping TypeName="ContactsRepoModel.ClientRepoConfig">
+              <MappingFragment StoreEntitySet="ClientRepoConfig">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ConfigType" ColumnName="ConfigType" />
+                <ScalarProperty Name="ConfigKey" ColumnName="ConfigKey" />
+                <ScalarProperty Name="ConfigValue" ColumnName="ConfigValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
